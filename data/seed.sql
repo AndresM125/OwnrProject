@@ -25,3 +25,6 @@ INSERT INTO animal_photos(category_id, photo_url) VALUES (2, 'https://founded.me
 INSERT INTO animal_photos(category_id, photo_url) VALUES (2, 'https://founded.media/hiring/photos/sharks/8592704407_75c3c7ff53_h.jpg');
 INSERT INTO animal_photos(category_id, photo_url) VALUES (2, 'https://founded.media/hiring/photos/sharks/14730744390_cebc28aa86_k.jpg');
 INSERT INTO animal_photos(category_id, photo_url) VALUES (2, 'https://founded.media/hiring/photos/sharks/4936728723_91da549b05_b.jpg');
+
+-- ADMIN USERS
+INSERT INTO admin_users(email, password_hash, first_name, last_name) VALUES ('admin@ownr.ca', '$2b$10$/xyuHDpZk7FiADj0ZrUz9eANP7E3GYBKuyTLh4F7Mghel.b4pZfiC', 'Ownr', 'Admin');

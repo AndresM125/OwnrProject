@@ -2,10 +2,10 @@ const express = require('express');
 const expressWinston = require('express-winston');
 const path = require('path');
 const cookieParser = require('cookie-parser');
+const passport = require('passport');
+const configurePassportStrategy = require('./config/passport-config');
 
-const authRouter = require('./routes/auth');
-
-const createApp = (logger) => {
+const createApp = (logger, authService, photoService, categoryService) => {
   const app = express();
 
   app.use(expressWinston.logger({ winstonInstance: logger }));
@@ -13,11 +13,24 @@ const createApp = (logger) => {
   app.use(express.urlencoded({ extended: false }));
   app.use(cookieParser());
 
-  // TODO: Serve your React App using the express server
+  configurePassportStrategy(passport, authService);
+
   const buildPath = path.normalize(path.join(__dirname, './client/build'));
   app.use(express.static(buildPath));
 
-  app.use('/auth', authRouter);
+  const authRouter = require('./routes/authRouter')(authService);
+  const photosRouter = require('./routes/photosRouter')(photoService);
+  const categoriesRouter = require('./routes/categoriesRouter')(categoryService);
+
+  // api routes
+  app.use('/api/auth', authRouter);
+  app.use('/api/photos', photosRouter);
+  app.use('/api/categories', categoriesRouter);
+
+  // serve client if it's not an api route
+  app.get('*', function(req, res) {
+    res.sendFile(path.resolve(buildPath, 'index.html'));
+  });
 
   // catch 404 and forward to error handler
   app.use((req, res) => {

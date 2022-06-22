@@ -20,7 +20,17 @@ const createApp = require('../app');
  * Create app, inject dependencies
  */
 
-const app = createApp(logger);
+const sequelize = require("../config/sequelize-conect");
+
+const adminUserRepo = require('../data/repos/adminUsersRepo')(sequelize);
+const animalPhotoRepo = require('../data/repos/animalPhotoRepo')(sequelize);
+const animalCategoriesRepo = require('../data/repos/animalCategoriesRepo')(sequelize);
+
+const authService = require('../services/authService')(adminUserRepo);
+const photoService = require('../services/photoService')(animalPhotoRepo);
+const categoryService = require('../services/categoryService')(animalCategoriesRepo, animalPhotoRepo);
+
+const app = createApp(logger, authService, photoService, categoryService);
 
 /**
   * Create HTTP server.
